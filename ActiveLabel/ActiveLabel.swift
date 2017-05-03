@@ -26,6 +26,8 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
     open var urlMaximumLength: Int?
     
     open var configureLinkAttribute: ConfigureLinkAttribute?
+    
+    open var activeTypeAttachmentDict: [ActiveType:NSTextAttachment] = [:]
 
     @IBInspectable open var mentionColor: UIColor = .blue {
         didSet { updateTextStorage(parseText: false) }
@@ -280,7 +282,23 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
         }
 
         addLinkAttribute(mutAttrString)
-        textStorage.setAttributedString(mutAttrString)
+        
+        let attrStr = NSMutableAttributedString(attributedString: mutAttrString)
+        for (activeType, attachment) in activeTypeAttachmentDict {
+            if let regular = try? NSRegularExpression(pattern: activeType.pattern, options: .init(rawValue: 0)) {
+                if let range = regular.firstMatch(in: mutAttrString.string, options: .reportCompletion, range: NSMakeRange(0, mutAttrString.string.characters.count))?.range {
+                    if range.length <= 0 { continue }
+                    attrStr.replaceCharacters(in: NSMakeRange(range.location, 1), with: NSAttributedString(attachment: attachment))
+                    for i in 1..<range.length {
+                        attrStr.replaceCharacters(in: NSMakeRange(range.location + i, 1), with: NSAttributedString(attachment: NSTextAttachment()))
+                    }
+                }
+            }
+            
+        }
+        
+        //textStorage.setAttributedString(mutAttrString)
+        textStorage.setAttributedString(attrStr)
         _customizing = true
         text = mutAttrString.string
         _customizing = false
