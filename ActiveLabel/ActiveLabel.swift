@@ -285,7 +285,9 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
         
         let attrStr = NSMutableAttributedString(attributedString: mutAttrString)
         for (activeType, attachment) in activeTypeAttachmentDict {
-            print(attrStr, activeType.pattern)
+            print(attrStr)
+            print("======")
+            print(activeType.pattern)
             if let regular = try? NSRegularExpression(pattern: activeType.pattern, options: .init(rawValue: 0)) {
                 if let range = regular.firstMatch(in: mutAttrString.string, options: .reportCompletion, range: NSMakeRange(0, mutAttrString.string.count))?.range {
                     if range.length <= 0 { continue }
