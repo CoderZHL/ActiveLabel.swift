@@ -285,13 +285,8 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
         
         let attrStr = NSMutableAttributedString(attributedString: mutAttrString)
         for (activeType, attachment) in activeTypeAttachmentDict {
-            print(attrStr)
-            print("======")
-            print(activeType.pattern)
             if let regular = try? NSRegularExpression(pattern: activeType.pattern, options: .init(rawValue: 0)) {
-                print("-----\(regular)--\(mutAttrString.string)--\(mutAttrString.string.count)---")
                 if let range = regular.firstMatch(in: mutAttrString.string, options: .reportCompletion, range: NSMakeRange(0, NSString(string: mutAttrString.string).length))?.range {
-                    print("-----\(range)-----")
                     if range.length <= 0 { continue }
                     attrStr.replaceCharacters(in: NSMakeRange(range.location, 1), with: NSAttributedString(attachment: attachment))
                     for i in 1..<range.length {
@@ -299,8 +294,6 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
                     }
                 }
             }
-            print("---------")
-            print(attrStr)
         }
         
         //textStorage.setAttributedString(mutAttrString)
