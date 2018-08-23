@@ -297,7 +297,8 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
                     }
                 }
             }
-            
+            print("---------")
+            print(attrStr)
         }
         
         //textStorage.setAttributedString(mutAttrString)
