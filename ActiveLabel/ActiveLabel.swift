@@ -289,7 +289,9 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
             print("======")
             print(activeType.pattern)
             if let regular = try? NSRegularExpression(pattern: activeType.pattern, options: .init(rawValue: 0)) {
+                print("-----\(regular)-----")
                 if let range = regular.firstMatch(in: mutAttrString.string, options: .reportCompletion, range: NSMakeRange(0, mutAttrString.string.count))?.range {
+                    print("-----\(range)-----")
                     if range.length <= 0 { continue }
                     attrStr.replaceCharacters(in: NSMakeRange(range.location, 1), with: NSAttributedString(attachment: attachment))
                     for i in 1..<range.length {
